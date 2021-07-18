@@ -1,0 +1,9 @@
+{
+    "server":{
+        "hostname": "localhost",
+        "port": 8000
+    },
+    "auth":{
+        "secret": "Cerebrum!123"
+    }
+}
