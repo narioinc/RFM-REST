@@ -1,9 +1,20 @@
 {
-    "server":{
-        "hostname": "localhost",
-        "port": 8000
-    },
-    "auth":{
-        "secret": "Cerebrum!123"
+    "rfm": {
+        "server": {
+            "hostname": "localhost",
+            "port": 8000,
+            "logger": {
+                "enabled": true,
+                "loglevel": "info"
+            }
+        },
+        "mqtt": {
+            "broker_url": "127.0.0.1",
+            "broker_port": "1883",
+            "logger": {
+                "enabled": true,
+                "loglevel": "info"
+            }
+        }
     }
 }

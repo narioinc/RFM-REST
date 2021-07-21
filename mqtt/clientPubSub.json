@@ -1,0 +1,17 @@
+{
+    "subscribe": {
+        "device_provision": "/{deviceid}/provision",
+        "device_provision_reset": "/{deviceid}/provision/reset",
+        "agent_config": "/{deviceid}/config",
+        "agent_config_reset": "/{deviceid}/config/reset"
+    },
+    "publish": {
+        "cpu_metrics": "/{deviceid}/metrics/cpu",
+        "mem_metrics": "/{deviceid}/metrics/mem",
+        "health": "/{deviceid}/health",
+        "device_provision_accepted": "/{deviceid}/provision/accepted",
+        "agent_config": "/{deviceid}/config/accepted",
+        "agent_config_reset_accepted": "/{deviceid}/config/reset/accepted"
+
+    }
+}
