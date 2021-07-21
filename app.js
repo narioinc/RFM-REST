@@ -13,6 +13,7 @@ swaggerSpecs = require('./utils/swaggerdocs');
 //var systemInfoRouter = require('./routes/system/systeminfo');
 var serverRouter = require('./routes/server/server')
 var deviceRouter = require('./routes/device/device')
+var discoveryRouter = require('./routes/device/discover')
 
 var app = express();
 
@@ -25,6 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 app.use('/server', serverRouter);
 app.use('/device', deviceRouter)
+app.use('/discover', discoveryRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

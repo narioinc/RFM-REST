@@ -5,6 +5,23 @@ var deviceManager = require('./deviceManager');
 deviceManager.initDeviceManager();
 
 /**
+* @swagger
+* /device/discover:
+*   get:
+*     description: Discover devices advertising in the local network
+*     tags: [Device Provisioning]
+*     responses:
+*       200:
+*         description: Returns list of RFM agent devices advertising themselves in the local network.
+*/
+router.get('/discover', function (req, res, next) { 
+    console.log("lasjdhfjkhsdfjkdh")
+    res.status(200)
+    res.json({})
+    //res.json(deviceManager.getDiscoveredDevices())
+})
+
+/**
  * @swagger
  * /device:
  *   get:
@@ -14,7 +31,10 @@ deviceManager.initDeviceManager();
  *       200:
  *         description: Returns the list of all provisioned devices with their details.
  */
-router.get('/', function (req, res, next) { })
+router.get('/', function (req, res, next) { 
+    res.status(200)
+    res.json({})
+})
 
 /**
 * @swagger
@@ -33,7 +53,7 @@ router.get('/', function (req, res, next) { })
 *       200:
 *         description: Returns the details of trhe device with id {deviceId}.
 */
-router.get('/:deviceId', function (req, res, next) { })
+router.get('/:deviceId', function (req, res, next) {})
 
 /**
  * @swagger
@@ -84,18 +104,6 @@ router.put('/:deviceId', function (req, res, next) { })
  *         description: Returns success if the device got deleted successfully.
  */
 router.put('/:deviceId', function (req, res, next) { })
-
-/**
-* @swagger
-* /device/discover:
-*   get:
-*     description: Discover devices advertising in the local network
-*     tags: [Device Provisioning]
-*     responses:
-*       200:
-*         description: Returns list of RFM agent devices advertising themselves in the local network.
-*/
-router.get('/discover', function (req, res, next) { })
 
 
 module.exports = router
