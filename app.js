@@ -8,12 +8,12 @@ RFMConfig.initConfig();
 var cors = require('cors')
 RFMLogger = require('./utils/logger');
 const swaggerUi = require('swagger-ui-express');
-swaggerSpecs = require('./utils/swaggerdocs');
+swaggerSpecs = require('./utils/swaggerDocs');
 
 //var systemInfoRouter = require('./routes/system/systeminfo');
 var serverRouter = require('./routes/server/server')
-var deviceRouter = require('./routes/device/device')
-var discoveryRouter = require('./routes/device/discover')
+var deviceRouter = require('./routes/device/deviceApi')
+var discoveryRouter = require('./routes/device/discoveryApi')
 
 var app = express();
 
