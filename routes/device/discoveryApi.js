@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var deviceManager = require('./deviceManager');
+var deviceManager = require('../../device/deviceManager');
 
 deviceManager.initDeviceManager();
 

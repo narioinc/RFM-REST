@@ -1,6 +1,6 @@
 const { Sequelize } = require('sequelize');
 RFMLogger = require('../utils/logger');
-Device = require('../routes/device/models/device')
+Device = require('../device/models/device')
 
 // Option 2: Passing parameters separately (sqlite)
 const sequelize = new Sequelize({

@@ -1,6 +1,6 @@
 var deviceDiscovery = require('./deviceDiscovery')
 const { v4: uuidv4 } = require('uuid');
-const RFMStorage = require('../../data/database');
+const RFMStorage = require('../data/database');
 sequelize = RFMStorage.getSQLInstance();
 
 var discoveredDevices = {};
