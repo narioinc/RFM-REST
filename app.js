@@ -9,6 +9,8 @@ var cors = require('cors')
 RFMLogger = require('./utils/logger');
 const swaggerUi = require('swagger-ui-express');
 swaggerSpecs = require('./utils/swaggerDocs');
+var RFMStorage = require('./data/database');
+RFMStorage.initDatabase();
 
 //var systemInfoRouter = require('./routes/system/systeminfo');
 var serverRouter = require('./routes/server/server')

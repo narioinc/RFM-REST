@@ -32,8 +32,14 @@ router.get('/discover', function (req, res, next) {
  *         description: Returns the list of all provisioned devices with their details.
  */
 router.get('/', function (req, res, next) { 
-    res.status(200)
-    res.json({})
+    deviceManager.getRegisteredDevices().then(data => {
+        res.status(200)
+        res.json(data)
+    }).catch(err => {
+        res.status(404)
+        res.json()
+    })
+    
 })
 
 /**
@@ -53,7 +59,17 @@ router.get('/', function (req, res, next) {
 *       200:
 *         description: Returns the details of trhe device with id {deviceId}.
 */
-router.get('/:deviceId', function (req, res, next) {})
+router.get('/:deviceId', function (req, res, next) {
+    deviceId = req.params.deviceId
+    deviceManager.getRegisteredDevice(deviceId).then(data => {
+        //console.log("result " + data)
+        res.status(200);
+        res.json(data)
+    }).catch(err=> {
+        res.status(404);
+        res.json(err) 
+    })
+})
 
 /**
  * @swagger
@@ -65,7 +81,41 @@ router.get('/:deviceId', function (req, res, next) {})
  *       200:
  *         description: Returns success if a new device got provisoned successfully.
  */
-router.post('/', function (req, res, next) { })
+router.post('/', function (req, res, next) { 
+    deviceDetails = req.body
+    deviceManager.registerDevice(deviceDetails).then(data => {
+        //console.log("result " + data)
+        res.status(200);
+        res.json(data)
+    }).catch(err=>{
+        res.status(400);
+        res.json(err)
+    })
+    
+})
+
+/**
+ * @swagger
+ * /device:
+ *   delete:
+ *     description: Delete a new devices
+ *     tags: [Device Provisioning]
+ *     responses:
+ *       200:
+ *         description: Returns success if a device got deleted successfully.
+ */
+ router.delete('/:deviceId', function (req, res, next) { 
+    deviceId = req.params.deviceId
+    deviceManager.removeDevice(deviceId).then(data => {
+        //console.log("result " + data)
+        res.status(200);
+        res.json(data)
+    }).catch(err=> {
+        res.status(400)
+        res.json(err)
+    })
+    
+})
 
 /**
 * @swagger
@@ -84,25 +134,6 @@ router.post('/', function (req, res, next) { })
 *       200:
 *         description: Returns success if the device got updated successfully.
 */
-router.put('/:deviceId', function (req, res, next) { })
-
-/**
- * @swagger
- * /device/{deviceId}:
- *   delete:
- *     description: Delete a provisioned device from the server
- *     parameters:
- *       - in: path
- *         name: deviceId
- *         schema:
- *           type: string
- *         required: true
- *         description: Device ID of the provisioned device
- *     tags: [Device Provisioning]
- *     responses:
- *       200:
- *         description: Returns success if the device got deleted successfully.
- */
 router.put('/:deviceId', function (req, res, next) { })
 
 
