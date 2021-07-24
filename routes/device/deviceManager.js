@@ -3,7 +3,8 @@ const { v4: uuidv4 } = require('uuid');
 const RFMStorage = require('../../data/database');
 sequelize = RFMStorage.getSQLInstance();
 
-var discoveredDevices = [];
+var discoveredDevices = {};
+discoveredDevices["devices"] = {}
 
 var deviceManager = {
     discoveredDevices: [],
@@ -12,10 +13,11 @@ var deviceManager = {
     },
     serviceUp: function (device) {
         RFMLogger.info(device)
-        discoveredDevices[device.host] = device
+        discoveredDevices["devices"][device.host] = device
     },
     serviceDown: function (device) {
         RFMLogger.info(device)
+        delete discoveredDevices["devices"][device.host];
     },
     getDiscoveredDevices: function () {
         //console.log(discoveredDevices)
@@ -79,8 +81,22 @@ var deviceManager = {
             })
            
         })
+    },
+    updateDevice: function(deviceDetails){
+        var device = sequelize.models.device.build(deviceDetails);
+        return new Promise((resolve, reject) => {
+            sequelize.models.device.update(device, {
+                where: {
+                    deviceId: device.deviceId
+                }
+            }).then(data => {
+                resolve(data.dataValues)
+            }).catch(err => {
+                reject({"status": "fail", "message": "Device could not be updated"})
+            })
+        })
+       
     }
-
 }
 
 module.exports = deviceManager;

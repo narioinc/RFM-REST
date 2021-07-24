@@ -15,7 +15,7 @@ deviceManager.initDeviceManager();
 *         description: Returns list of RFM agent devices advertising themselves in the local network.
 */
 router.get('/', function (req, res, next) { 
-    var result = {"devices": deviceManager.getDiscoveredDevices()}
+    var result = deviceManager.getDiscoveredDevices()
     console.log(result);
     res.status(200)
     res.json(result)

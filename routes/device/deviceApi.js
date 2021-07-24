@@ -134,7 +134,16 @@ router.post('/', function (req, res, next) {
 *       200:
 *         description: Returns success if the device got updated successfully.
 */
-router.put('/:deviceId', function (req, res, next) { })
+router.put('/:deviceId', function (req, res, next) { 
+    deviceDetails = req.body;
+    deviceManager.updateDevice(deviceDetails).then(data=>{
+        res.status(200);
+        res.json(data);
+    }).catch(err =>{
+        res.status(400)
+        res.json(err)
+    })
+})
 
 
 module.exports = router
