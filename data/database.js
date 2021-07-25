@@ -12,12 +12,17 @@ const sequelize = new Sequelize({
 
 var RFMStorage = {
   initDatabase: function () {
-    sequelize.authenticate().then(data => {
-      RFMLogger.info('Connection to the database has been established successfully.');
-      this.syncAllModel();
-    }).catch(err => {
-      console.error('Unable to connect to the database:', err);
-    });
+    return new Promise((resolve, reject) => {
+      sequelize.authenticate().then(data => {
+        RFMLogger.info('Connection to the database has been established successfully.');
+        this.syncAllModel();
+        resolve("database initialised")
+      }).catch(err => {
+        RFMLogger.error('Unable to connect to the RFM database:', err);
+        reject("error initializing database")
+      });
+    })
+    
   },
   closeDatabase: function () {
     if (sequelize) {

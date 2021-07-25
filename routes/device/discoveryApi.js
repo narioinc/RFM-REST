@@ -1,8 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var deviceManager = require('../../device/deviceManager');
-
-deviceManager.initDeviceManager();
 
 /**
 * @swagger
@@ -16,7 +13,6 @@ deviceManager.initDeviceManager();
 */
 router.get('/', function (req, res, next) { 
     var result = deviceManager.getDiscoveredDevices()
-    console.log(result);
     res.status(200)
     res.json(result)
 })

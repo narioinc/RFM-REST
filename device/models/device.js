@@ -16,8 +16,26 @@ module.exports = (sequelize) => {
     deviceDesc: {
       type: DataTypes.STRING,
       defaultValue: ""
+    },
+    mqttHealth: {
+      type: DataTypes.STRING,
+      defaultValue: "disconnected"
+    },
+    agentHealth:{
+      type: DataTypes.STRING,
+      defaultValue: "disconnected"
+    },
+    host:{
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: ""
+    },
+    port:{
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: ""
     }
   }, { sequelize, modelName: 'device' });
-  Device.sync();
+  Device.sync({ alter: true });
 }
 

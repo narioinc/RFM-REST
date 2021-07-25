@@ -8,14 +8,19 @@ RFMConfig.initConfig();
 var cors = require('cors')
 RFMLogger = require('./utils/logger');
 const swaggerUi = require('swagger-ui-express');
-swaggerSpecs = require('./utils/swaggerDocs');
-var RFMStorage = require('./data/database');
-RFMStorage.initDatabase();
+const swaggerSpecs = require('./utils/swaggerDocs');
+RFMStorage = require('./data/database');
+deviceManager = require('./device/deviceManager');
+
+RFMStorage.initDatabase().then(data => {
+  deviceManager.initDeviceManager(RFMStorage);
+});
+
 
 //var systemInfoRouter = require('./routes/system/systeminfo');
 var serverRouter = require('./routes/server/server')
 var deviceRouter = require('./routes/device/deviceApi')
-var discoveryRouter = require('./routes/device/discoveryApi')
+var discoveryRouter = require('./routes/device/discoveryApi');
 
 var app = express();
 
@@ -47,14 +52,17 @@ app.use(cors());
 
 process.on('SIGTERM', () => {
   debug('SIGTERM signal received: closing HTTP server')
+ 
   server.close(() => {
     debug('HTTP server closed')
   })
 })
 
 process.on('SIGINT', function () {
-  RFMLogger.info("Shutting down agent");
+  RFMLogger.info("Shutting down server database connection");
+  RFMStorage.closeDatabase();
   if (true)
+  RFMLogger.info("Shutting down RFM");
     process.exit();
 });
 

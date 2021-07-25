@@ -1,25 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var deviceManager = require('../../device/deviceManager');
-
-deviceManager.initDeviceManager();
-
-/**
-* @swagger
-* /device/discover:
-*   get:
-*     description: Discover devices advertising in the local network
-*     tags: [Device Provisioning]
-*     responses:
-*       200:
-*         description: Returns list of RFM agent devices advertising themselves in the local network.
-*/
-router.get('/discover', function (req, res, next) { 
-    console.log("lasjdhfjkhsdfjkdh")
-    res.status(200)
-    res.json({})
-    //res.json(deviceManager.getDiscoveredDevices())
-})
 
 /**
  * @swagger
@@ -62,7 +42,6 @@ router.get('/', function (req, res, next) {
 router.get('/:deviceId', function (req, res, next) {
     deviceId = req.params.deviceId
     deviceManager.getRegisteredDevice(deviceId).then(data => {
-        //console.log("result " + data)
         res.status(200);
         res.json(data)
     }).catch(err=> {
@@ -84,7 +63,6 @@ router.get('/:deviceId', function (req, res, next) {
 router.post('/', function (req, res, next) { 
     deviceDetails = req.body
     deviceManager.registerDevice(deviceDetails).then(data => {
-        //console.log("result " + data)
         res.status(200);
         res.json(data)
     }).catch(err=>{
@@ -107,7 +85,6 @@ router.post('/', function (req, res, next) {
  router.delete('/:deviceId', function (req, res, next) { 
     deviceId = req.params.deviceId
     deviceManager.removeDevice(deviceId).then(data => {
-        //console.log("result " + data)
         res.status(200);
         res.json(data)
     }).catch(err=> {

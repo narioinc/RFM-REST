@@ -10,10 +10,9 @@ var mqttClient = {
         if (!client) {
             var mqttConfig = RFMConfig.getMqttConfig();
             var mqttUrl = 'mqtt://' + mqttConfig.broker_url + ":" + mqttConfig.broker_port
-            RFMLogger.info("connecting to " + mqttUrl)
+            RFMLogger.info("Mqtt client connecting to " + mqttUrl)
             client = mqtt.connect(mqttUrl)
         }
-        this.startListener();
     },
 
     getClient: function(){
@@ -40,15 +39,17 @@ var mqttClient = {
         }
     },
 
-    subscribeToTopic: function(topic, cb){
+    subscribeToTopic: function(topic){
         if(client){
             if(topic){
-                client.subscribe(topic, (err) => {cb(err)})
+                client.subscribe(topic, (err) => {
+                   if(err) RFMLogger.error("Error subscribing to mqtt topic")
+                })
             }else{
-                RFMLogger.error("please provide a topic")
+                RFMLogger.error("Please provide a topic")
             }
         }else{
-            RFMLogger.error("mqtt client is not initialized")
+            RFMLogger.error("MQTT client is not initialized")
         }
     },
 
@@ -62,12 +63,7 @@ var mqttClient = {
         }else{
             RFMLogger.info("mqtt client is not initialized")
         }
-    },
-
-    startListener: function(){
-        provision.listen();
     }
-
 }
 
 module.exports = mqttClient;
