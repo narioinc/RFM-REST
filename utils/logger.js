@@ -1,10 +1,18 @@
 var winston = require('winston');
 const homedir = require('os').homedir();
+var configDirPath = require('path').join(homedir, '.rfm/server');
+
+process.env["NODE_CONFIG_DIR"] = configDirPath
+config = require('config');
+RFMConfig = config.get('rfm');
+logLevel = RFMConfig.server.logger.loglevel
+logEnabled = RFMConfig.server.logger.enabled
 
 RFMLogger = winston.createLogger({
+    silent: !logEnabled,
     transports: [
         new winston.transports.File({
-            level: 'info',
+            level: logLevel,
             filename: require('path').join(homedir, '.rfm') + '/rfm.log',
             handleExceptions: true,
             json: true,
@@ -13,7 +21,7 @@ RFMLogger = winston.createLogger({
             colorize: false
         }),
         new winston.transports.Console({
-            level: 'debug',
+            level: logLevel,
             handleExceptions: true,
             json: false,
             colorize: true

@@ -22,8 +22,8 @@ var RFMConfig = {
           }
         });
     }
-    
-    if(!fs.existsSync(configDirPath + '/default.json')){
+
+    if (!fs.existsSync(configDirPath + '/default.json')) {
       RFMLogger.info("copying default config file to " + configDirPath + '/default.json');
       copyDefaultConfig();
     }
@@ -70,7 +70,5 @@ function writeConfigFile(config) {
 function copyDefaultConfig() {
   fs.copyFileSync(appRoot + "/default.json", require('path').join(homedir, '.rfm') + "/default.json", fs.constants.COPYFILE_EXCL);
 }
-
-
 
 module.exports = RFMConfig;
