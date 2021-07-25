@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const homedir = require('os').homedir();
-var configDirPath = require('path').join(homedir, '.rfm');
+var configDirPath = require('path').join(homedir, '.rfm/server');
 RFMLogger = require('../utils/logger');
 
 var RFMFullConfig;

@@ -7,7 +7,7 @@
                 "enabled": true,
                 "loglevel": "info"
             },
-        "httpHealthCheckInterval": 60000
+        "healthCheckInterval": 10000
         },
         "mqtt": {
             "broker_url": "127.0.0.1",

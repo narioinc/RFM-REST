@@ -2,6 +2,10 @@ RFMLogger = require('../utils/logger');
 var deviceTracker = {}
 const axios = require('axios');
 const device = require('./models/device');
+RFMConfig = require('../config/RFMConfig')
+RFMConfig.initConfig();
+
+healthCheckInterval = RFMConfig.getServerConfig().healthCheckInterval;
 
 var connectivityTracker = {
     mqttClient: {},
@@ -44,20 +48,19 @@ var connectivityTracker = {
                     deviceTracker[device.deviceId] ? {} : deviceTracker[device.deviceId] = {}
                     RFMLogger.debug("Getting RFM Agent health for device with deviceId : " + device.deviceId)
                     deviceHealthUrl = "http://" + device.host + ":" + device.port + "/health";
-                    axios.get(deviceHealthUrl).then(function (response) {
+                    axios.get(deviceHealthUrl, {timeout: 3000}).then(function (response) {
+                        console.log(response)
                         RFMLogger.debug(response);
                         deviceTracker[device.deviceId]['httpLastHealthCheck'] = Date.now();
                     })
                         .catch(function (error) {
-                            RFMLogger.error(error);
+                            RFMLogger.debug(error);
                             deviceTracker[device.deviceId]['httpLastHealthCheck'] = 0
                         })
 
                 })
             })
-        }, 10000);
-
-
+        }, healthCheckInterval);
     },
     getRegisteredDevices: function () {
         sequelize = this.RFMStorage.getSQLInstance();
@@ -77,9 +80,9 @@ var connectivityTracker = {
             for (const key in deviceTracker) {
                 deviceTrackerData = deviceTracker[key];
                 var mqttHealth, httpHealth
-                //TODO  make the seconds as configurable for the agent
+                
                 if (!deviceTrackerData.mqttLastHealthCheck || deviceTrackerData.mqttLastHealthCheck <= 0 ) {
-                    RFMLogger.debug("mqtt last health check not present for deviceId : " + key);
+                    RFMLogger.debug("RFM agent mqtt last health check not present for deviceId : " + key);
                     sequelize.models.device.update({ "mqttHealth": "disconnected" }, {
                         where: {
                             deviceId: key
@@ -87,22 +90,47 @@ var connectivityTracker = {
                     })
                 }
                 else if (Date.now() - deviceTrackerData['mqttLastHealthCheck'] > 60000) {
-                    RFMLogger.debug("mqtt last health greater than health timeout for deviceId : " + key);
+                    RFMLogger.debug("RFM agent mqtt last health greater than health timeout for deviceId : " + key);
                     sequelize.models.device.update({ "mqttHealth": "disconnected" }, {
                         where: {
                             deviceId: key
                         }
                     })
                 } else {
-                    RFMLogger.debug("mqtt last health has passed for deviceId : " + key);
+                    RFMLogger.debug("RFM agent mqtt last health has passed for deviceId : " + key);
                     sequelize.models.device.update({ "mqttHealth": "connected" }, {
                         where: {
                             deviceId: key
                         }
                     })
                 }
+
+                if (!deviceTrackerData.httpLastHealthCheck || deviceTrackerData.httpLastHealthCheck <= 0 ) {
+                    RFMLogger.debug("RFM agent server last health check not present for deviceId : " + key);
+                    sequelize.models.device.update({ "agentHealth": "disconnected" }, {
+                        where: {
+                            deviceId: key
+                        }
+                    })
+                }
+                else if (Date.now() - deviceTrackerData['httpLastHealthCheck'] > 60000) {
+                    RFMLogger.debug("RFM agent server last health greater than health timeout for deviceId : " + key);
+                    sequelize.models.device.update({ "agentHealth": "disconnected" }, {
+                        where: {
+                            deviceId: key
+                        }
+                    })
+                } else {
+                    RFMLogger.debug("RFM agent server last health has passed for deviceId : " + key);
+                    sequelize.models.device.update({ "agentHealth": "connected" }, {
+                        where: {
+                            deviceId: key
+                        }
+                    })
+                }
             }
-        }, 10000);
+            //TODO  make the seconds as configurable for the agent
+        }, healthCheckInterval);
     },
     createDeviceTrackerEntry: function(device){
         RFMLogger.debug("adding device with device id : " + device.deviceId + " to the tracker entries")
